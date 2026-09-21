@@ -1,0 +1,39 @@
+---
+const { destination } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+<article class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white card-lift">
+  <a href={`${base}destinations/${destination.slug}/`} class="focus-ring block">
+    <div class="image-zoom relative aspect-[4/3]">
+      <img src={destination.image} alt={destination.name} loading="lazy" class="h-full w-full object-cover" />
+      <span class="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-slate-800 transition-transform duration-300 group-hover:scale-105">{destination.category}</span>
+      <div class="card-overlay"><span>Découvrir →</span></div>
+    </div>
+    <div class="p-5">
+      <div class="mb-1 text-xs font-semibold text-slate-500">📍 {destination.province}</div>
+      <h3 class="text-lg font-extrabold tracking-tight transition-colors duration-300 group-hover:text-brand-700">{destination.name}</h3>
+      <p class="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">{destination.short}</p>
+      <div class="mt-4 flex items-center justify-between">
+        <span class="text-sm font-bold text-slate-900">⭐ {destination.rating}</span>
+        <span class="text-xs text-slate-500">{destination.reviews} avis</span>
+      </div>
+    </div>
+  </a>
+  <button type="button" data-favorite={destination.slug} aria-label={`Ajouter ${destination.name} aux favoris`} class="favorite-btn focus-ring absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-white/95 text-lg shadow-sm hover:text-brand-700">♡</button>
+</article>
+<script>
+  document.querySelectorAll("[data-favorite]").forEach((button) => {
+    if (button.dataset.bound) return;
+    button.dataset.bound = "1";
+    const slug = button.dataset.favorite;
+    const favorites = JSON.parse(localStorage.getItem("gabon-favorites") || "[]");
+    if (favorites.includes(slug)) button.textContent = "♥";
+    button.addEventListener("click", () => {
+      const current = JSON.parse(localStorage.getItem("gabon-favorites") || "[]");
+      const next = current.includes(slug) ? current.filter((x) => x !== slug) : [...current, slug];
+      localStorage.setItem("gabon-favorites", JSON.stringify(next));
+      button.textContent = next.includes(slug) ? "♥" : "♡";
+      button.setAttribute("aria-pressed", String(next.includes(slug)));
+    });
+  });
+</script>

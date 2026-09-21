@@ -1,0 +1,24 @@
+---
+const base = import.meta.env.BASE_URL;
+---
+<footer class="border-t border-slate-200 bg-slate-950 text-white">
+  <div class="container-site grid gap-10 py-12 md:grid-cols-3">
+    <div>
+      <div class="mb-3 text-lg font-extrabold">Explore<span class="text-brand-400">Gabon</span></div>
+      <p class="max-w-sm text-sm leading-6 text-slate-400">Une plateforme pensée pour découvrir les destinations touristiques du Gabon.</p>
+    </div>
+    <div>
+      <h2 class="mb-3 font-bold">Explorer</h2>
+      <div class="space-y-2 text-sm text-slate-400">
+        <a class="block hover:text-white" href={`${base}destinations/`}>Destinations</a>
+        <a class="block hover:text-white" href={`${base}experiences/`}>Expériences</a>
+        <a class="block hover:text-white" href={`${base}regions/`}>Régions</a>
+      </div>
+    </div>
+    <div>
+      <h2 class="mb-3 font-bold">Projet V1</h2>
+      <p class="text-sm leading-6 text-slate-400">Prototype statique Astro, conçu pour évoluer ensuite vers une base Supabase.</p>
+    </div>
+  </div>
+  <div class="border-t border-white/10 py-5 text-center text-xs text-slate-500">© {new Date().getFullYear()} ExploreGabon — Prototype V1</div>
+</footer>

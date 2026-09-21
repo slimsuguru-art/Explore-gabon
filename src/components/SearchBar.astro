@@ -1,0 +1,16 @@
+<form id="search-form" class="rounded-2xl bg-white p-2 shadow-2xl shadow-slate-950/10 sm:flex sm:items-center">
+  <div class="flex min-w-0 flex-1 items-center gap-3 px-4 py-3">
+    <span class="text-xl">⌕</span>
+    <input id="search-input" name="q" class="w-full bg-transparent text-sm font-semibold outline-none placeholder:text-slate-400" placeholder="Rechercher une destination, une région..." aria-label="Rechercher une destination, une région ou une activité" />
+  </div>
+  <button class="w-full rounded-xl bg-brand-700 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-brand-800 sm:w-auto" type="submit">Rechercher</button>
+</form>
+<script>
+  const searchForm = document.getElementById("search-form");
+  searchForm?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const q = document.getElementById("search-input")?.value.trim();
+    const base = import.meta.env.BASE_URL;
+    window.location.href = q ? `${base}destinations/?q=${encodeURIComponent(q)}` : `${base}destinations/`;
+  });
+</script>

@@ -1,0 +1,57 @@
+---
+const base = import.meta.env.BASE_URL;
+---
+<header class="sticky top-0 z-50 border-b border-slate-100 bg-white/95 backdrop-blur">
+  <div class="container-site flex h-16 items-center justify-between gap-4">
+    <a href={base} class="focus-ring flex items-center gap-2 font-display text-xl font-bold tracking-tight text-slate-950">
+      <span class="grid h-9 w-9 place-items-center rounded-xl bg-brand-700 text-lg text-white">G</span>
+      <span>Explore<span class="text-brand-700">Gabon</span></span>
+    </a>
+    <nav class="hidden items-center gap-7 text-sm font-semibold md:flex">
+      <a class="hover:text-brand-700" href={`${base}destinations/`}>Destinations</a>
+      <a class="hover:text-brand-700" href={`${base}experiences/`}>Expériences</a>
+      <a class="hover:text-brand-700" href={`${base}regions/`}>Régions</a>
+      <a class="hover:text-brand-700" href={`${base}#explore`}>Explorer</a>
+      <a class="hover:text-brand-700" href={`${base}favoris/`}>♡ Favoris</a>
+      <a id="auth-link" class="hover:text-brand-700" href={`${base}connexion/`}>Connexion</a>
+    </nav>
+    <a href={`${base}destinations/`} class="hidden rounded-xl bg-brand-700 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-brand-800 md:inline-block">Explorer le Gabon</a>
+    <button id="mobile-menu-btn" class="focus-ring rounded-lg border border-slate-200 p-2 md:hidden" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-menu">☰</button>
+  </div>
+  <div id="mobile-menu" class="hidden border-t border-slate-100 bg-white px-4 pb-4 md:hidden">
+    <nav class="container-site flex flex-col gap-1 pt-3 text-sm font-semibold">
+      <a class="rounded-lg p-3 hover:bg-slate-50" href={`${base}destinations/`}>Destinations</a>
+      <a class="rounded-lg p-3 hover:bg-slate-50" href={`${base}experiences/`}>Expériences</a>
+      <a class="rounded-lg p-3 hover:bg-slate-50" href={`${base}regions/`}>Régions</a>
+      <a class="rounded-lg p-3 hover:bg-slate-50" href={`${base}favoris/`}>♡ Favoris</a>
+      <a id="auth-link-mobile" class="rounded-lg p-3 hover:bg-slate-50" href={`${base}connexion/`}>Connexion</a>
+    </nav>
+  </div>
+</header>
+<script>
+  import { supabase } from "../lib/supabase.js";
+  const btn = document.getElementById("mobile-menu-btn");
+  const menu = document.getElementById("mobile-menu");
+  btn?.addEventListener("click", () => {
+    const open = menu?.classList.toggle("hidden") === false;
+    btn.setAttribute("aria-expanded", String(open));
+  });
+
+  async function updateAuthUI() {
+    const { data: { session } } = await supabase.auth.getSession();
+    [document.getElementById("auth-link"), document.getElementById("auth-link-mobile")]
+      .filter(Boolean)
+      .forEach((el) => {
+        if (session?.user) {
+          el.textContent = `👤 ${session.user.email.split("@")[0]}`;
+          el.setAttribute("href", "#");
+          el.addEventListener("click", async (e) => {
+            e.preventDefault();
+            await supabase.auth.signOut();
+            location.reload();
+          });
+        }
+      });
+  }
+  updateAuthUI();
+</script>

@@ -1,0 +1,94 @@
+---
+import { preferenceActivities } from '../data/preferences';
+const base = import.meta.env.BASE_URL;
+---
+<section class="section-pad bg-slate-950 text-white" id="preferences">
+  <div class="container-site">
+    <div class="mx-auto max-w-2xl text-center">
+      <p class="text-sm font-bold uppercase tracking-wider text-brand-400">Votre voyage, vos envies</p>
+      <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">Dites-nous ce que vous aimez.</h2>
+      <p class="mt-4 leading-7 text-slate-300">Glissez les activités qui vous attirent. Nous utiliserons vos préférences pour proposer des découvertes plus pertinentes.</p>
+    </div>
+
+    <div class="mx-auto mt-10 max-w-md">
+      <div id="preference-deck" class="relative h-[500px] sm:h-[540px]">
+        {preferenceActivities.map((activity, index) => (
+          <article
+            class="preference-card absolute inset-0 overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900 shadow-2xl"
+            data-id={activity.id}
+            data-category={activity.category}
+            style={`z-index:${preferenceActivities.length - index}; transform: translateY(${index * 5}px) scale(${1 - index * 0.018}); opacity:${1 - index * 0.045};`}
+          >
+            <img src={activity.image} alt={activity.title} class="h-full w-full object-cover" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
+            <div class="absolute inset-x-0 bottom-0 p-7">
+              <span class="inline-flex rounded-full bg-white/15 px-3 py-1 text-sm font-bold backdrop-blur">{activity.icon} {activity.category}</span>
+              <h3 class="mt-4 text-3xl font-extrabold">{activity.title}</h3>
+              <p class="mt-2 leading-6 text-slate-200">{activity.description}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div class="mt-6 flex items-center justify-center gap-4">
+        <button type="button" data-swipe="no" aria-label="Passer cette activité" class="h-14 w-14 rounded-full border border-white/20 bg-white/10 text-xl transition hover:scale-105 hover:bg-white/15">✕</button>
+        <button type="button" data-swipe="yes" aria-label="J'aime cette activité" class="h-16 w-16 rounded-full bg-white text-2xl text-slate-950 shadow-xl transition hover:scale-105">♥</button>
+        <button type="button" data-swipe="save" aria-label="Garder cette activité en préférence" class="h-14 w-14 rounded-full border border-white/20 bg-white/10 text-xl transition hover:scale-105 hover:bg-white/15">★</button>
+      </div>
+
+      <div class="mt-6 text-center">
+        <p id="preference-status" class="text-sm text-slate-400">Choisissez vos activités préférées.</p>
+        <a id="preference-results" href={`${base}destinations/`} class="mt-4 hidden rounded-xl bg-white px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-brand-50">Voir mes découvertes →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script define:vars={{ base }}>
+  const cards = [...document.querySelectorAll('.preference-card')];
+  const status = document.querySelector('#preference-status');
+  const results = document.querySelector('#preference-results');
+  const deck = document.querySelector('#preference-deck');
+  const choices = JSON.parse(localStorage.getItem('gabon-preferences') || '[]');
+  let current = cards.length - 1;
+  let startX = 0;
+
+  const refresh = () => {
+    cards.forEach((card, index) => {
+      const distance = current - index;
+      if (distance < 0) return;
+      card.style.zIndex = String(index + 1);
+      card.style.transform = `translateY(${distance * 5}px) scale(${1 - distance * 0.018})`;
+      card.style.opacity = String(Math.max(0, 1 - distance * 0.045));
+    });
+    status.textContent = current >= 0 ? `${choices.length} préférence${choices.length > 1 ? 's' : ''} sélectionnée${choices.length > 1 ? 's' : ''}` : 'Vos préférences sont prêtes.';
+    if (current < 0) {
+      results.classList.remove('hidden');
+      const preferred = choices[0];
+      results.href = preferred ? `${base}destinations/?category=${encodeURIComponent(preferred)}` : `${base}destinations/`;
+    }
+  };
+
+  const swipe = (liked) => {
+    if (current < 0) return;
+    const card = cards[current];
+    if (liked) choices.push(card.dataset.category);
+    localStorage.setItem('gabon-preferences', JSON.stringify([...new Set(choices)]));
+    card.style.transition = 'transform .35s ease, opacity .35s ease';
+    card.style.transform = `translate(${liked ? 120 : -120}%, 20px) rotate(${liked ? 10 : -10}deg)`;
+    card.style.opacity = '0';
+    current -= 1;
+    setTimeout(refresh, 260);
+  };
+
+  document.querySelectorAll('[data-swipe]').forEach((button) => {
+    button.addEventListener('click', () => swipe(button.dataset.swipe !== 'no'));
+  });
+
+  deck.addEventListener('pointerdown', (event) => { startX = event.clientX; });
+  deck.addEventListener('pointerup', (event) => {
+    const delta = event.clientX - startX;
+    if (Math.abs(delta) > 70) swipe(delta > 0);
+  });
+  refresh();
+</script>

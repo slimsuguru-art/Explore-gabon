@@ -1,0 +1,112 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import SearchBar from "../components/SearchBar.astro";
+import DestinationCard from "../components/DestinationCard.astro";
+import PreferenceSwiper from "../components/PreferenceSwiper.astro";
+import { destinations } from "../data/destinations";
+import { categories } from "../data/categories";
+import { regions } from "../data/regions";
+import { experiences } from "../data/experiences";
+const featured = destinations.filter((d) => d.featured);
+const base = import.meta.env.BASE_URL;
+---
+<Layout title="ExploreGabon — Découvrez le Gabon">
+  <Header />
+  <main>
+    <section class="relative isolate min-h-[650px] overflow-hidden bg-slate-950">
+      <img src="https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=2200&q=90" alt="Paysage naturel" class="absolute inset-0 -z-20 h-full w-full object-cover" />
+      <div class="hero-gradient absolute inset-0 -z-10"></div>
+      <div class="container-site flex min-h-[650px] items-end pb-16 pt-24 sm:pb-24">
+        <div class="w-full max-w-4xl text-white">
+          <div class="reveal mb-5 inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold backdrop-blur">🇬🇦 Le Gabon à découvrir</div>
+          <h1 class="reveal max-w-3xl text-4xl font-extrabold tracking-tight sm:text-6xl">Explorez le Gabon autrement.</h1>
+          <p class="reveal mt-5 max-w-2xl text-base leading-7 text-slate-200 sm:text-lg">Découvrez parcs, plages, forêts, cascades et expériences naturelles depuis une plateforme unique.</p>
+          <div class="reveal mt-8"><SearchBar /></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-pad" id="explore">
+      <div class="container-site">
+        <div class="reveal flex items-end justify-between gap-6">
+          <div><p class="text-sm font-bold uppercase tracking-wider text-brand-700">Explorer</p><h2 class="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">Que voulez-vous découvrir ?</h2></div>
+          <a href={`${base}experiences/`} class="hidden text-sm font-bold text-brand-700 hover:text-brand-900 sm:block">Voir tout →</a>
+        </div>
+        <div class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {categories.map((category) => (
+            <a href={`${base}destinations/?category=${encodeURIComponent(category.name)}`} class="reveal card-lift rounded-2xl border border-slate-200 bg-white p-5">
+              <span class="text-3xl">{category.icon}</span>
+              <h3 class="mt-4 font-extrabold">{category.name}</h3>
+              <p class="mt-1 text-sm leading-6 text-slate-500">{category.description}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <PreferenceSwiper />
+
+    <section class="section-pad bg-slate-50">
+      <div class="container-site">
+        <div class="reveal flex items-end justify-between gap-6">
+          <div><p id="featured-eyebrow" class="text-sm font-bold uppercase tracking-wider text-brand-700">Sélection</p><h2 id="featured-title" class="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">Destinations à découvrir</h2></div>
+          <a href={`${base}destinations/`} class="hidden text-sm font-bold text-brand-700 hover:text-brand-900 sm:block">Toutes les destinations →</a>
+        </div>
+        <div id="featured-grid" class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {featured.map((destination) => (
+            <div class="reveal featured-item" data-category={destination.category}>
+              <DestinationCard destination={destination} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <script>
+      const choices = JSON.parse(localStorage.getItem('gabon-preferences') || '[]');
+      if (choices.length) {
+        const grid = document.getElementById('featured-grid');
+        const items = [...document.querySelectorAll('.featured-item')];
+        const matching = items.filter((item) => choices.includes(item.dataset.category));
+        const rest = items.filter((item) => !choices.includes(item.dataset.category));
+        [...matching, ...rest].forEach((item) => grid.appendChild(item));
+        if (matching.length) {
+          document.getElementById('featured-eyebrow').textContent = 'Pour vous';
+          document.getElementById('featured-title').textContent = 'Sélectionné selon vos préférences';
+        }
+      }
+    </script>
+
+    <section class="section-pad">
+      <div class="container-site">
+        <div class="reveal overflow-hidden rounded-3xl bg-slate-950">
+          <div class="grid lg:grid-cols-2">
+            <div class="p-8 sm:p-12 lg:p-14">
+              <p class="text-sm font-bold uppercase tracking-wider text-brand-400">Explorez le territoire</p>
+              <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">Découvrez le Gabon région par région.</h2>
+              <p class="mt-5 max-w-xl leading-7 text-slate-300">Parcourez les provinces et trouvez les destinations qui correspondent à votre prochaine découverte.</p>
+              <a href={`${base}regions/`} class="mt-8 inline-flex rounded-xl bg-white px-5 py-3 font-bold text-slate-950 transition hover:bg-brand-50">Explorer les régions</a>
+            </div>
+            <div class="min-h-[320px] bg-cover bg-center" style={`background-image:url('${regions[1].image}')`}></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-pad bg-slate-50">
+      <div class="container-site">
+        <div class="reveal"><p class="text-sm font-bold uppercase tracking-wider text-brand-700">Expériences</p><h2 class="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">Voyager selon vos envies.</h2></div>
+        <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {experiences.map((experience) => (
+            <a href={`${base}destinations/?category=${encodeURIComponent(experience.category)}`} class="reveal card-lift rounded-2xl border border-slate-200 bg-white p-6">
+              <span class="text-3xl">{experience.icon}</span><h3 class="mt-5 font-extrabold">{experience.title}</h3><p class="mt-2 text-sm leading-6 text-slate-500">{experience.description}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>

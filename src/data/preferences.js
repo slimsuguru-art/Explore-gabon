@@ -1,0 +1,8 @@
+export const preferenceActivities = [
+  { id: 'plage', title: 'Plage & océan', description: 'Pour profiter du littoral, du soleil et des paysages côtiers.', icon: '🌊', category: 'Plages', image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=85' },
+  { id: 'faune', title: 'Faune sauvage', description: 'Observer la nature et les animaux dans leur environnement.', icon: '🦍', category: 'Parcs nationaux', image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=1200&q=85' },
+  { id: 'foret', title: 'Forêt & immersion', description: 'Explorer les paysages forestiers et vivre une expérience nature.', icon: '🌿', category: 'Forêts', image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=85' },
+  { id: 'rando', title: 'Randonnée & aventure', description: 'Bouger, marcher et découvrir des itinéraires hors des sentiers battus.', icon: '🥾', category: 'Forêts', image: 'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=1200&q=85' },
+  { id: 'culture', title: 'Culture & patrimoine', description: 'Découvrir les histoires, traditions et lieux emblématiques du Gabon.', icon: '🏛️', category: 'Culture & nature', image: 'https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=85' },
+  { id: 'photo', title: 'Photographie', description: 'Chercher des paysages, scènes et points de vue mémorables.', icon: '📷', category: 'Photographie', image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=85' }
+];
