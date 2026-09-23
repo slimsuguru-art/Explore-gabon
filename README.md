@@ -1,30 +1,21 @@
-# ExploreGabon — V1
+# ExploreGabon V2
 
-Prototype d'une plateforme touristique du Gabon construite avec Astro, JavaScript et Tailwind CSS.
+Refonte complète de l'interface du prototype ExploreGabon.
 
-## Fonctionnalités
+## Ce qui change en V2
 
-- Accueil avec hero et recherche
-- Catalogue de destinations
-- Recherche sur destination, province, catégorie et activités
-- Filtres par province et catégorie
-- Catégories et expériences
-- Exploration des 9 provinces
-- Fiches destination statiques
-- Destinations à proximité
-- Favoris avec `localStorage`
-- Responsive mobile-first
-- Motion design léger avec support de `prefers-reduced-motion`
-- Architecture prête pour une future intégration Supabase
-- Déploiement automatique sur GitHub Pages via GitHub Actions
-
-## Stack
-
-- Astro
-- JavaScript
-- Tailwind CSS
-- GitHub Actions
-- GitHub Pages
+- Interface plus proche des plateformes touristiques modernes, sans copier Booking.
+- Header plus sobre et professionnel.
+- Hero plus immersif avec recherche flottante.
+- Recherche séparée par destination et expérience.
+- Icônes SVG cohérentes à la place des emojis dans l'interface.
+- Cartes destinations plus proches d'une fiche de plateforme de voyage.
+- Badges de catégorie et de note plus lisibles.
+- Pages Destinations, Expériences, Régions et Favoris harmonisées.
+- Swipe de préférences conservé.
+- Notes et commentaires conservés en local pour le prototype.
+- Architecture compatible avec une future migration Supabase.
+- GitHub Pages configuré pour `https://slimsuguru-art.github.io/Explore-gabon/`.
 
 ## Installation locale
 
@@ -33,61 +24,56 @@ npm install
 npm run dev
 ```
 
-Build de production :
+Production :
 
 ```bash
 npm run build
 ```
 
-Prévisualisation :
-
-```bash
-npm run preview
-```
-
 ## Déploiement GitHub Pages
 
-Le dépôt est configuré pour une publication sur :
+Le workflow est dans `.github/workflows/deploy.yml`.
 
-`https://slimsuguru-art.github.io/Gabon-horizon/`
-
-Le fichier `.github/workflows/deploy.yml` :
-
-1. se déclenche sur chaque push vers `main` ou manuellement depuis GitHub Actions ;
-2. installe les dépendances avec `npm install` ;
-3. lance `npm run build` ;
-4. publie le dossier `dist` sur GitHub Pages.
+Il utilise Node 24, `npm install`, puis `npm run build` et déploie `dist` avec GitHub Pages.
 
 Dans GitHub :
 
 **Settings → Pages → Build and deployment → Source → GitHub Actions**.
 
-Après le premier push, consulte **Actions** pour vérifier le workflow de déploiement.
+## Remplacement du dépôt existant
 
-## Configuration GitHub Pages
+Cette V2 est conçue pour remplacer entièrement le contenu actuel du dépôt `slimsuguru-art/Explore-gabon`.
 
-`astro.config.mjs` contient :
+1. Sauvegarder l'ancien dépôt si nécessaire.
+2. Extraire le ZIP.
+3. Copier **tout le contenu du dossier `ExploreGabon-V2`** dans une copie locale du dépôt.
+4. Remplacer les fichiers existants et conserver le dossier `.git` du dépôt local.
+5. Vérifier :
 
-- `site: "https://slimsuguru-art.github.io"`
-- `base: "/Gabon-horizon"`
-- `trailingSlash: "always"`
+```bash
+npm install
+npm run build
+```
 
-Les liens internes utilisent `import.meta.env.BASE_URL` afin de fonctionner correctement sous le sous-chemin du dépôt.
+6. Puis :
 
-## Données
+```bash
+git add .
+git commit -m "Refonte complète ExploreGabon V2"
+git push origin main
+```
 
-La V1 utilise des données locales dans `src/data/`. Les textes, images, notes et nombres d'avis sont des données de prototype et doivent être vérifiés/remplacés avant une mise en production.
+7. Ouvrir l'onglet **Actions** sur GitHub et attendre `Deploy ExploreGabon`.
 
-Les images actuelles utilisent des URLs externes de démonstration. Pour une version production, il est recommandé de centraliser les médias dans un stockage maîtrisé.
+## Supabase
 
-## Suite prévue
+Aucune clé Supabase n'est incluse dans le ZIP. Le fichier `.env.example` indique les deux variables attendues :
 
-La prochaine étape logique est de remplacer progressivement les données locales par Supabase, puis d'ajouter authentification, avis réels, administration, partenaires et fonctionnalités de réservation.
+- `PUBLIC_SUPABASE_URL`
+- `PUBLIC_SUPABASE_ANON_KEY`
 
-## Nouveautés — V2 UX
-- Sélecteur d'activités sous forme de cartes à swiper.
-- Préférences mémorisées en local pour préparer les recommandations.
-- Notes de destination de 1 à 5 étoiles.
-- Commentaires locaux par destination.
-- Sélection d'activités directement sur les fiches destinations.
-- Architecture prête à migrer ces données vers Supabase.
+La V2 conserve le client Supabase afin de ne pas casser la suite du projet.
+
+## Important
+
+Les destinations, images, notes et avis présents dans le prototype sont des données de démonstration. Les images sont externes et devront être maîtrisées avant une mise en production.

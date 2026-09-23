@@ -1,67 +1,11 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import Header from "../../components/Header.astro";
-import Footer from "../../components/Footer.astro";
-import DestinationCard from "../../components/DestinationCard.astro";
-import { destinations } from "../../data/destinations";
-const query = Astro.url.searchParams.get("q") || "";
-const category = Astro.url.searchParams.get("category") || "";
-const provinceQuery = Astro.url.searchParams.get("province") || "";
-const provinces = [...new Set(destinations.map((d) => d.province))];
-const categories = [...new Set(destinations.map((d) => d.category))];
+import Layout from "../../layouts/Layout.astro"; import Header from "../../components/Header.astro"; import Footer from "../../components/Footer.astro"; import DestinationCard from "../../components/DestinationCard.astro"; import { destinations } from "../../data/destinations";
+const query=Astro.url.searchParams.get("q")||"",category=Astro.url.searchParams.get("category")||"",provinceQuery=Astro.url.searchParams.get("province")||""; const provinces=[...new Set(destinations.map(d=>d.province))],categories=[...new Set(destinations.map(d=>d.category))];
 ---
-<Layout title="Destinations — ExploreGabon">
-  <Header />
-  <main>
-    <section class="border-b border-slate-200 bg-slate-50 py-14">
-      <div class="container-site">
-        <p class="text-sm font-bold uppercase tracking-wider text-brand-700">Catalogue</p>
-        <h1 class="mt-2 text-4xl font-extrabold tracking-tight">Toutes les destinations</h1>
-        <p class="mt-3 max-w-2xl text-slate-600">Recherchez et filtrez les destinations du prototype ExploreGabon.</p>
-      </div>
-    </section>
-    <section class="section-pad">
-      <div class="container-site">
-        <div class="mb-8 grid gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:grid-cols-[1fr_auto_auto]">
-          <input id="live-search" value={query} placeholder="Rechercher..." class="focus-ring rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none" />
-          <select id="province-filter" class="focus-ring rounded-xl border border-slate-200 px-4 py-3 text-sm">
-            <option value="">Toutes les provinces</option>
-            {provinces.map((p) => <option value={p} selected={p === provinceQuery}>{p}</option>)}
-          </select>
-          <select id="category-filter" class="focus-ring rounded-xl border border-slate-200 px-4 py-3 text-sm">
-            <option value="">Toutes les catégories</option>
-            {categories.map((c) => <option value={c} selected={c === category}>{c}</option>)}
-          </select>
-        </div>
-        <div id="destination-grid" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {destinations.map((destination) => (
-            <div class="destination-item" data-name={`${destination.name} ${destination.province} ${destination.category} ${destination.activities.join(" ")}`.toLowerCase()} data-province={destination.province} data-category={destination.category}>
-              <DestinationCard destination={destination} />
-            </div>
-          ))}
-        </div>
-        <p id="empty-state" class="hidden py-20 text-center text-slate-500">Aucune destination ne correspond à votre recherche.</p>
-      </div>
-    </section>
-  </main>
-  <Footer />
-</Layout>
-<script>
-  const input = document.getElementById("live-search");
-  const province = document.getElementById("province-filter");
-  const category = document.getElementById("category-filter");
-  const items = [...document.querySelectorAll(".destination-item")];
-  const empty = document.getElementById("empty-state");
-  function filter() {
-    const q = input.value.toLowerCase().trim(), p = province.value, c = category.value;
-    let count = 0;
-    items.forEach((item) => {
-      const match = (!q || item.dataset.name.includes(q)) && (!p || item.dataset.province === p) && (!c || item.dataset.category === c);
-      item.classList.toggle("hidden", !match);
-      if (match) count++;
-    });
-    empty.classList.toggle("hidden", count !== 0);
-  }
-  [input, province, category].forEach((el) => el.addEventListener("input", filter));
-  filter();
-</script>
+<Layout title="Destinations — ExploreGabon"><Header/><main>
+<section class="page-hero"><div class="container-site"><p class="section-eyebrow">Catalogue</p><h1 class="page-title">Toutes les destinations</h1><p class="page-lead">Recherchez, filtrez et découvrez les lieux du prototype ExploreGabon.</p></div></section>
+<section class="section-pad"><div class="container-site">
+<div class="filter-panel"><div class="filter-search"><label for="live-search">Rechercher</label><input id="live-search" value={query} placeholder="Nom, région, activité..." /></div><div><label for="province-filter">Province</label><select id="province-filter"><option value="">Toutes</option>{provinces.map(p=><option value={p} selected={p===provinceQuery}>{p}</option>)}</select></div><div><label for="category-filter">Catégorie</label><select id="category-filter"><option value="">Toutes</option>{categories.map(c=><option value={c} selected={c===category}>{c}</option>)}</select></div></div>
+<div id="destination-grid" class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">{destinations.map(destination=><div class="destination-item" data-name={`${destination.name} ${destination.province} ${destination.category} ${destination.activities.join(" ")}`.toLowerCase()} data-province={destination.province} data-category={destination.category}><DestinationCard destination={destination}/></div>)}</div><p id="empty-state" class="hidden py-20 text-center text-slate-500">Aucune destination ne correspond à votre recherche.</p>
+</div></section></main><Footer/></Layout>
+<script>const input=document.getElementById('live-search'),province=document.getElementById('province-filter'),category=document.getElementById('category-filter'),items=[...document.querySelectorAll('.destination-item')],empty=document.getElementById('empty-state');function filter(){const q=input.value.toLowerCase().trim(),p=province.value,c=category.value;let n=0;items.forEach(i=>{const ok=(!q||i.dataset.name.includes(q))&&(!p||i.dataset.province===p)&&(!c||i.dataset.category===c);i.classList.toggle('hidden',!ok);if(ok)n++;});empty.classList.toggle('hidden',n!==0)}[input,province,category].forEach(e=>e.addEventListener('input',filter));filter();</script>

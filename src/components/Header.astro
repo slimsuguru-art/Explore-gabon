@@ -1,20 +1,44 @@
 ---
+import Icon from "./Icon.astro";
 const base = import.meta.env.BASE_URL;
 ---
-<header class="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 backdrop-blur">
-  <div class="container-site flex h-[76px] items-center gap-6 lg:grid lg:grid-cols-[1fr_auto_1fr]">
-    <a href={base} class="focus-ring flex items-center gap-3 font-display text-xl font-bold tracking-tight text-slate-950"><span class="grid h-10 w-10 place-items-center rounded-xl bg-brand-700 text-lg text-white shadow-sm">G</span><span>Explore<span class="text-brand-700">Gabon</span></span></a>
-    <nav class="hidden items-center justify-center gap-1 text-sm font-semibold lg:flex" aria-label="Navigation principale">
-      <a class="rounded-lg px-3 py-2 transition hover:bg-brand-50 hover:text-brand-700" href={base + "destinations/"}>Destinations</a><a class="rounded-lg px-3 py-2 transition hover:bg-brand-50 hover:text-brand-700" href={base + "experiences/"}>Expériences</a><a class="rounded-lg px-3 py-2 transition hover:bg-brand-50 hover:text-brand-700" href={base + "regions/"}>Régions</a><a class="rounded-lg px-3 py-2 transition hover:bg-brand-50 hover:text-brand-700" href={base + "#explore"}>Explorer</a>
+<header class="site-header sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 backdrop-blur">
+  <div class="container-site flex h-[74px] items-center gap-5">
+    <a href={base} class="brand-mark focus-ring flex shrink-0 items-center gap-3" aria-label="ExploreGabon, accueil">
+      <span class="brand-symbol">G</span>
+      <span class="font-display text-xl font-bold tracking-tight text-slate-950">Explore<span class="text-brand-700">Gabon</span></span>
+    </a>
+    <nav class="hidden flex-1 items-center justify-center gap-1 lg:flex" aria-label="Navigation principale">
+      <a class="nav-link" href={base + "destinations/"}>Destinations</a>
+      <a class="nav-link" href={base + "experiences/"}>Expériences</a>
+      <a class="nav-link" href={base + "regions/"}>Régions</a>
+      <a class="nav-link" href={base + "#explore"}>Inspiration</a>
     </nav>
-    <div class="hidden items-center justify-end gap-3 lg:flex"><a href={base + "favoris/"} class="focus-ring inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-brand-50 hover:text-brand-700">♡ Favoris</a><a id="auth-link" class="focus-ring rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-brand-50 hover:text-brand-700" href={base + "connexion/"}>Connexion</a><a href={base + "destinations/"} class="focus-ring rounded-xl bg-brand-700 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-brand-800">Explorer le Gabon</a></div>
-    <button id="mobile-menu-btn" class="focus-ring ml-auto rounded-lg border border-slate-200 p-2 lg:hidden" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-menu">☰</button>
+    <div class="ml-auto hidden items-center gap-1 lg:flex">
+      <a href={base + "favoris/"} class="header-action focus-ring"><Icon name="heart" class="h-4 w-4" /> Favoris</a>
+      <a id="auth-link" class="header-action focus-ring" href={base + "connexion/"}><Icon name="user" class="h-4 w-4" /> Connexion</a>
+    </div>
+    <button id="mobile-menu-btn" class="focus-ring ml-auto grid h-10 w-10 place-items-center rounded-xl border border-slate-200 lg:hidden" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-menu"><Icon name="menu" /></button>
+  </div>
+  <div id="mobile-menu" class="container-site hidden border-t border-slate-200 py-3 lg:hidden">
+    <nav class="grid gap-1">
+      <a class="mobile-nav-link" href={base + "destinations/"}>Destinations</a>
+      <a class="mobile-nav-link" href={base + "experiences/"}>Expériences</a>
+      <a class="mobile-nav-link" href={base + "regions/"}>Régions</a>
+      <a class="mobile-nav-link" href={base + "favoris/"}>Mes favoris</a>
+    </nav>
   </div>
 </header>
 <script>
-import { supabase } from "../lib/supabase.js";
-const btn=document.getElementById("mobile-menu-btn");
-btn?.addEventListener("click",()=>{});
-async function updateAuthUI(){const {data:{session}}=await supabase.auth.getSession();const el=document.getElementById("auth-link");if(session?.user&&el){el.textContent="👤 "+session.user.email.split("@")[0];el.href="#";}}
-updateAuthUI();
+  const btn = document.getElementById("mobile-menu-btn");
+  const menu = document.getElementById("mobile-menu");
+  btn?.addEventListener("click", () => { const open = btn.getAttribute("aria-expanded") === "true"; btn.setAttribute("aria-expanded", String(!open)); menu?.classList.toggle("hidden", open); });
+  async function updateAuthUI() {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const el = document.getElementById("auth-link");
+      if (session?.user && el) { el.innerHTML = '<span class="inline-flex items-center gap-2"><svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c.8-3.3 3.1-5 7-5s6.2 1.7 7 5"/></svg> Mon compte</span>'; el.href = "#"; }
+    } catch {}
+  }
+  updateAuthUI();
 </script>

@@ -1,10 +1,10 @@
 export const categories = [
-  { name: "Plages", icon: "🌊", description: "Littoral et plages sauvages" },
-  { name: "Faune sauvage", icon: "🐘", description: "Observer la biodiversité" },
-  { name: "Forêts", icon: "🌳", description: "Explorer les forêts équatoriales" },
-  { name: "Cascades", icon: "💦", description: "Découvrir les chutes et rivières" },
-  { name: "Randonnées", icon: "🥾", description: "Marcher et explorer" },
-  { name: "Fleuves", icon: "🛶", description: "Découvrir les cours d'eau" },
-  { name: "Culture", icon: "🏛️", description: "Patrimoine et histoire" },
-  { name: "Photographie", icon: "📸", description: "Des paysages à immortaliser" }
+  { name: "Plages", icon: "wave", description: "Littoral et plages sauvages" },
+  { name: "Faune sauvage", icon: "leaf", description: "Observer la biodiversité" },
+  { name: "Forêts", icon: "tree", description: "Explorer les forêts équatoriales" },
+  { name: "Cascades", icon: "waterfall", description: "Découvrir les chutes et rivières" },
+  { name: "Randonnées", icon: "hiking", description: "Marcher et explorer" },
+  { name: "Fleuves", icon: "river", description: "Découvrir les cours d'eau" },
+  { name: "Culture", icon: "culture", description: "Patrimoine et histoire" },
+  { name: "Photographie", icon: "camera", description: "Des paysages à immortaliser" }
 ];

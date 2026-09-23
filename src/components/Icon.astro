@@ -1,0 +1,23 @@
+---
+const { name = "compass", class: className = "h-6 w-6" } = Astro.props;
+const icons = {
+  compass: '<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2.2 4.8-4.8 2.2 2.2-4.8 4.8-2.2Z"/>',
+  search: '<circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/>',
+  heart: '<path d="M20.8 8.9c0 5.5-8.8 10.1-8.8 10.1S3.2 14.4 3.2 8.9A4.7 4.7 0 0 1 8 4.2c1.5 0 3 .8 4 2 1-1.2 2.5-2 4-2a4.7 4.7 0 0 1 4.8 4.7Z"/>',
+  user: '<circle cx="12" cy="8" r="3.2"/><path d="M5 20c.8-3.3 3.1-5 7-5s6.2 1.7 7 5"/>',
+  pin: '<path d="M20 10c0 5.8-8 11-8 11S4 15.8 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/>',
+  wave: '<path d="M3 8c2.2 0 2.2-2 4.5-2S9.7 8 12 8s2.2-2 4.5-2S18.7 8 21 8"/><path d="M3 13c2.2 0 2.2-2 4.5-2s2.2 2 4.5 2 2.2-2 4.5-2 2.2 2 4.5 2"/><path d="M3 18c2.2 0 2.2-2 4.5-2s2.2 2 4.5 2 2.2-2 4.5-2 2.2 2 4.5 2"/>',
+  leaf: '<path d="M20 4c-7.7.1-13 3-13 8.5C7 17 12 19 16 16c3.5-2.7 4-7.6 4-12Z"/><path d="M4 20c2.5-4.2 5.8-7.1 10.5-9.5"/>',
+  tree: '<path d="M12 21V9"/><path d="m12 12 4-4"/><path d="m12 15-4-4"/><path d="M8 9 6 7l3-3 3 2 3-2 3 3-2 2"/><path d="M8 9h8"/>',
+  waterfall: '<path d="M7 3v7c0 2 2 3 2 5v6"/><path d="M12 3v5c0 2-2 3-2 4"/><path d="M17 3v6c0 2-2 3-2 5v7"/><path d="M4 21h16"/>',
+  hiking: '<circle cx="14" cy="5" r="2"/><path d="m12 9 3 3 2 4"/><path d="m10 11-3 5 4 1 2 5"/><path d="m7 16-3 5"/><path d="M14 12 9 9"/>',
+  river: '<path d="M4 4c8 3 8 13 16 16"/><path d="M20 4c-8 3-8 13-16 16"/>',
+  culture: '<path d="M4 20h16"/><path d="M5 20V9h14v11"/><path d="M3 9h18L12 4 3 9Z"/><path d="M8 12v5M12 12v5M16 12v5"/>',
+  camera: '<path d="M4 7h4l1.5-2h5L16 7h4v12H4V7Z"/><circle cx="12" cy="13" r="3.5"/>',
+  menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+  arrow: '<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>',
+  calendar: '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/>',
+  star: '<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/>'
+};
+---
+<svg class={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={icons[name] || icons.compass}></svg>
