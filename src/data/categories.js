@@ -5,6 +5,6 @@ export const categories = [
   { name: "Cascades", icon: "waterfall", description: "Découvrir les chutes et rivières" },
   { name: "Randonnées", icon: "hiking", description: "Marcher et explorer" },
   { name: "Fleuves", icon: "river", description: "Découvrir les cours d'eau" },
-  { name: "Culture", icon: "culture", description: "Patrimoine et histoire" },
+  { name: "Culture & nature", icon: "culture", description: "Patrimoine et histoire" },
   { name: "Photographie", icon: "camera", description: "Des paysages à immortaliser" }
 ];
