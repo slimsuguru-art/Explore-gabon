@@ -13,6 +13,10 @@ const base = import.meta.env.BASE_URL;
       <a class="nav-link" href={base + "experiences/"}>Expériences</a>
       <a class="nav-link" href={base + "regions/"}>Régions</a>
       <a class="nav-link" href={base + "#explore"}>Inspiration</a>
+      <form id="header-search-form" class="header-search" role="search" aria-label="Rechercher une destination">
+        <Icon name="search" class="h-4 w-4 shrink-0 text-slate-400" />
+        <input id="header-search-input" name="q" class="header-search-input" placeholder="Rechercher une destination..." />
+      </form>
     </nav>
     <div class="ml-auto hidden items-center gap-1 lg:flex">
       <a href={base + "favoris/"} class="header-action focus-ring"><Icon name="heart" class="h-4 w-4" /> Favoris</a>
@@ -31,9 +35,17 @@ const base = import.meta.env.BASE_URL;
 </header>
 <script>
   import { supabase } from "../lib/supabase.js";
+  const base = import.meta.env.BASE_URL;
   const btn = document.getElementById("mobile-menu-btn");
   const menu = document.getElementById("mobile-menu");
   btn?.addEventListener("click", () => { const open = btn.getAttribute("aria-expanded") === "true"; btn.setAttribute("aria-expanded", String(!open)); menu?.classList.toggle("hidden", open); });
+  document.getElementById("header-search-form")?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const q = document.getElementById("header-search-input")?.value.trim();
+    const params = new URLSearchParams();
+    if (q) params.set("q", q);
+    window.location.href = `${base}destinations/${params.toString() ? `?${params}` : ""}`;
+  });
   async function updateAuthUI() {
     try {
       const { data: { session } } = await supabase.auth.getSession();
