@@ -2,7 +2,6 @@
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import SearchBar from "../components/SearchBar.astro";
 import DestinationCard from "../components/DestinationCard.astro";
 import PreferenceSwiper from "../components/PreferenceSwiper.astro";
 import Icon from "../components/Icon.astro";
@@ -18,17 +17,16 @@ const featured=destinations.filter(d=>d.featured),base=import.meta.env.BASE_URL;
     <section class="home-hero relative isolate overflow-hidden bg-slate-950">
       <img src="https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=2200&q=90" alt="Paysage naturel du Gabon" class="hero-image absolute inset-0 -z-20 h-full w-full object-cover" />
       <div class="hero-overlay absolute inset-0 -z-10"></div>
-      <div class="container-site flex min-h-[620px] items-end pb-36 pt-20 sm:min-h-[680px] sm:pb-40">
+      <div class="container-site flex min-h-[560px] items-end pb-16 pt-20 sm:min-h-[600px] sm:pb-20">
         <div class="max-w-4xl text-white">
           <span class="hero-kicker reveal">🇬🇦 Le Gabon à découvrir</span>
           <h1 class="reveal mt-5 max-w-3xl text-4xl font-black leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">Trouvez votre prochaine découverte au Gabon.</h1>
           <p class="reveal mt-5 max-w-2xl text-base leading-7 text-slate-200 sm:text-lg">Des plages aux forêts, explorez les destinations et expériences qui correspondent à vos envies.</p>
         </div>
       </div>
-      <div class="container-site absolute inset-x-0 bottom-0 translate-y-1/2"><SearchBar /></div>
     </section>
 
-    <section class="bg-white pb-14 pt-28" id="explore">
+    <section class="bg-white pb-14 pt-14" id="explore">
       <div class="container-site">
         <div class="reveal flex items-end justify-between gap-6"><div><p class="section-eyebrow">Explorer</p><h2 class="section-title">Que voulez-vous découvrir ?</h2></div><a href={`${base}destinations/`} class="section-link hidden sm:block">Voir toutes les destinations →</a></div>
         <div class="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
