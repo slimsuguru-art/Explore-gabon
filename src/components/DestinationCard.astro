@@ -5,20 +5,20 @@ const base = import.meta.env.BASE_URL;
 ---
 <article class="destination-card group relative overflow-hidden rounded-2xl border border-slate-200 bg-white">
   <a href={`${base}destinations/${destination.slug}/`} class="block focus-ring">
-    <div class="image-zoom relative aspect-[4/3] overflow-hidden">
+    <div class="image-zoom relative aspect-[16/10] overflow-hidden">
       <img src={destination.image} alt={destination.name} loading="lazy" class="h-full w-full object-cover" />
       <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent"></div>
-      <span class="absolute left-3 top-3 rounded-lg bg-white px-3 py-1.5 text-xs font-extrabold text-slate-800 shadow-sm">{destination.category}</span>
-      <span class="rating-badge absolute bottom-3 left-3"><Icon name="star" class="h-3.5 w-3.5 fill-current text-amber-500" /> {destination.rating}</span>
+      <span class="absolute left-2.5 top-2.5 rounded-lg bg-white px-2.5 py-1 text-[11px] font-extrabold text-slate-800 shadow-sm">{destination.category}</span>
+      <span class="rating-badge absolute bottom-2.5 left-2.5 !px-2 !py-1 text-[11px]"><Icon name="star" class="h-3 w-3 fill-current text-amber-500" /> {destination.rating}</span>
     </div>
-    <div class="p-5">
+    <div class="p-4">
       <div class="flex items-center gap-1.5 text-xs font-semibold text-slate-500"><Icon name="pin" class="h-3.5 w-3.5" /> {destination.province}</div>
-      <h3 class="mt-2 text-lg font-extrabold tracking-tight text-slate-950 transition-colors group-hover:text-brand-700">{destination.name}</h3>
-      <p class="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">{destination.short}</p>
-      <div class="mt-5 flex items-center justify-between border-t border-slate-100 pt-4"><span class="text-xs font-semibold text-slate-500">{destination.reviews} avis</span><span class="inline-flex items-center gap-1 text-sm font-bold text-brand-700">Découvrir <Icon name="arrow" class="h-4 w-4" /></span></div>
+      <h3 class="mt-1.5 text-base font-extrabold tracking-tight text-slate-950 transition-colors group-hover:text-brand-700">{destination.name}</h3>
+      <p class="mt-1.5 line-clamp-2 text-sm leading-5 text-slate-600">{destination.short}</p>
+      <div class="mt-3 flex items-center justify-between border-t border-slate-100 pt-3"><span class="text-xs font-semibold text-slate-500">{destination.reviews} avis</span><span class="inline-flex items-center gap-1 text-sm font-bold text-brand-700">Découvrir <Icon name="arrow" class="h-3.5 w-3.5" /></span></div>
     </div>
   </a>
-  <button type="button" data-favorite={destination.slug} aria-label={`Ajouter ${destination.name} aux favoris`} class="favorite-btn focus-ring absolute right-3 top-3 grid h-10 w-10 place-items-center rounded-full bg-white text-slate-700 shadow-md"><Icon name="heart" class="h-5 w-5" /></button>
+  <button type="button" data-favorite={destination.slug} aria-label={`Ajouter ${destination.name} aux favoris`} class="favorite-btn focus-ring absolute right-2.5 top-2.5 grid h-8 w-8 place-items-center rounded-full bg-white text-slate-700 shadow-md"><Icon name="heart" class="h-4 w-4" /></button>
 </article>
 <script>
   document.querySelectorAll("[data-favorite]").forEach((button) => {
