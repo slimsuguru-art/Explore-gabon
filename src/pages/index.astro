@@ -27,8 +27,9 @@ const featured=destinations.filter(d=>d.featured),base=import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <section class="bg-white pb-14 pt-14" id="explore">
-      <div class="container-site">
+    <section class="relative overflow-hidden bg-white pb-14 pt-14" id="explore">
+      <div class="kota-pattern-light absolute inset-0 opacity-[0.05]"></div>
+      <div class="container-site relative">
         <div class="reveal flex items-end justify-between gap-6"><div><p class="section-eyebrow">Explorer</p><h2 class="section-title">Que voulez-vous découvrir ?</h2></div><a href={`${base}destinations/`} class="section-link hidden sm:block">Voir toutes les destinations →</a></div>
         <div class="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
           {categories.map(category=><a href={`${base}destinations/?category=${encodeURIComponent(category.name)}`} class="category-tile reveal"><span class="category-icon"><Icon name={category.icon} class="h-7 w-7" /></span><span class="mt-4 text-sm font-bold text-slate-900">{category.name}</span><span class="mt-1 text-xs text-slate-500">Découvrir</span></a>)}
