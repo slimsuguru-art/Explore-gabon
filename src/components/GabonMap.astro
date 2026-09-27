@@ -1,0 +1,45 @@
+---
+import { provinces } from "../data/provinces";
+const base = import.meta.env.BASE_URL;
+const { variant = "light" } = Astro.props;
+const layout = {
+  "Woleu-Ntem": { x: 60, y: 10, w: 220, h: 66 },
+  "Estuaire": { x: 30, y: 88, w: 110, h: 96 },
+  "Ogooué-Ivindo": { x: 208, y: 88, w: 142, h: 106 },
+  "Moyen-Ogooué": { x: 30, y: 196, w: 110, h: 88 },
+  "Ogooué-Lolo": { x: 208, y: 206, w: 142, h: 96 },
+  "Ogooué-Maritime": { x: 18, y: 296, w: 122, h: 104 },
+  "Ngounié": { x: 150, y: 314, w: 112, h: 96 },
+  "Haut-Ogooué": { x: 272, y: 314, w: 98, h: 106 },
+  "Nyanga": { x: 40, y: 412, w: 176, h: 44 }
+};
+const dark = variant === "swipe";
+---
+<div class:list={["gabon-map", { "gabon-map-dark": dark }]}>
+  <svg viewBox="0 0 380 466" role="img" aria-label="Carte des 9 provinces du Gabon" class="h-full w-full">
+    {provinces.map((p, i) => {
+      const box = layout[p.name];
+      const label = p.name.replace("-", "-\u200b").split("-");
+      return (
+        <a href={`${base}destinations/?province=${encodeURIComponent(p.name)}`} class="province-piece" style={`animation-delay:${i * 90}ms`}>
+          <rect x={box.x} y={box.y} width={box.w} height={box.h} rx="16" fill={dark ? "rgba(255,255,255,0.08)" : p.color} fill-opacity={dark ? 1 : 0.85} stroke={dark ? "rgba(255,255,255,.5)" : "white"} stroke-width="2" />
+          <text x={box.x + box.w / 2} y={box.y + box.h / 2} text-anchor="middle" dominant-baseline="middle" class="province-label" fill={dark ? "#fff" : "#fff"}>
+            {label.map((line, li) => <tspan x={box.x + box.w / 2} dy={li === 0 ? 0 : "1.1em"}>{line}{li < label.length - 1 ? "-" : ""}</tspan>)}
+          </text>
+          <title>{p.name} — {p.capital}. {p.blurb}</title>
+        </a>
+      );
+    })}
+  </svg>
+</div>
+<style>
+  .gabon-map{width:100%;height:100%}
+  .province-piece{cursor:pointer;transform-box:fill-box;transform-origin:center;transition:filter .25s ease;animation:pieceIn .6s ease backwards}
+  .province-piece:hover{filter:brightness(1.12)}
+  .province-piece rect{transition:transform .25s ease}
+  .province-piece:hover rect{transform:translateY(-3px)}
+  .province-label{font-size:11px;font-weight:700;pointer-events:none;text-transform:uppercase;letter-spacing:.02em}
+  .gabon-map-dark .province-label{font-size:10px;opacity:.9}
+  @keyframes pieceIn{from{opacity:0;transform:scale(.75)}to{opacity:1;transform:scale(1)}}
+  @media(prefers-reduced-motion:reduce){.province-piece{animation:none}}
+</style>
