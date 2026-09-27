@@ -1,45 +1,60 @@
 ---
 import { provinces } from "../data/provinces";
+import { destinations } from "../data/destinations";
 const base = import.meta.env.BASE_URL;
-const { variant = "light" } = Astro.props;
-const layout = {
-  "Woleu-Ntem": { x: 60, y: 10, w: 220, h: 66 },
-  "Estuaire": { x: 30, y: 88, w: 110, h: 96 },
-  "Ogooué-Ivindo": { x: 208, y: 88, w: 142, h: 106 },
-  "Moyen-Ogooué": { x: 30, y: 196, w: 110, h: 88 },
-  "Ogooué-Lolo": { x: 208, y: 206, w: 142, h: 96 },
-  "Ogooué-Maritime": { x: 18, y: 296, w: 122, h: 104 },
-  "Ngounié": { x: 150, y: 314, w: 112, h: 96 },
-  "Haut-Ogooué": { x: 272, y: 314, w: 98, h: 106 },
-  "Nyanga": { x: 40, y: 412, w: 176, h: 44 }
-};
+const { variant = "light", showSites = true } = Astro.props;
 const dark = variant === "swipe";
+
+// Simplified, hand-drawn approximation of Gabon's 9 provinces — illustrative, not surveyed-accurate.
+const shapes = {
+  "Woleu-Ntem": "40,20 250,15 270,50 250,90 180,110 120,95 60,100 30,60",
+  "Estuaire": "20,110 95,100 110,150 100,210 60,225 15,190",
+  "Ogooué-Ivindo": "260,55 370,60 380,180 340,230 260,220 240,140 255,95",
+  "Moyen-Ogooué": "105,215 165,205 190,230 175,270 130,275 95,245",
+  "Ogooué-Lolo": "245,225 335,235 345,300 300,340 235,320 220,270",
+  "Ogooué-Maritime": "15,230 95,220 125,255 115,320 80,360 25,340",
+  "Ngounié": "120,280 200,275 235,325 215,390 150,405 95,370 85,325",
+  "Haut-Ogooué": "305,300 385,310 395,420 340,450 270,430 240,375 265,335",
+  "Nyanga": "30,345 85,365 100,410 70,450 30,440"
+};
+const centroids = {
+  "Woleu-Ntem": [155, 60], "Estuaire": [65, 165], "Ogooué-Ivindo": [305, 140],
+  "Moyen-Ogooué": [143, 240], "Ogooué-Lolo": [285, 280], "Ogooué-Maritime": [65, 285],
+  "Ngounié": [160, 335], "Haut-Ogooué": [315, 375], "Nyanga": [62, 400]
+};
+const jitter = { "parc-national-de-livindo": [-16, -8], "makokou": [16, 10] };
+const sites = destinations.map((d) => {
+  const c = centroids[d.province] || [200, 240];
+  const [jx, jy] = jitter[d.slug] || [0, 0];
+  return { ...d, x: c[0] + jx, y: c[1] + jy };
+});
 ---
 <div class:list={["gabon-map", { "gabon-map-dark": dark }]}>
-  <svg viewBox="0 0 380 466" role="img" aria-label="Carte des 9 provinces du Gabon" class="h-full w-full">
-    {provinces.map((p, i) => {
-      const box = layout[p.name];
-      const label = p.name.replace("-", "-\u200b").split("-");
-      return (
-        <a href={`${base}destinations/?province=${encodeURIComponent(p.name)}`} class="province-piece" style={`animation-delay:${i * 90}ms`}>
-          <rect x={box.x} y={box.y} width={box.w} height={box.h} rx="16" fill={dark ? "rgba(255,255,255,0.08)" : p.color} fill-opacity={dark ? 1 : 0.85} stroke={dark ? "rgba(255,255,255,.5)" : "white"} stroke-width="2" />
-          <text x={box.x + box.w / 2} y={box.y + box.h / 2} text-anchor="middle" dominant-baseline="middle" class="province-label" fill={dark ? "#fff" : "#fff"}>
-            {label.map((line, li) => <tspan x={box.x + box.w / 2} dy={li === 0 ? 0 : "1.1em"}>{line}{li < label.length - 1 ? "-" : ""}</tspan>)}
-          </text>
-          <title>{p.name} — {p.capital}. {p.blurb}</title>
-        </a>
-      );
-    })}
+  <svg viewBox="0 0 400 470" role="img" aria-label="Carte des 9 provinces du Gabon" class="h-full w-full">
+    {provinces.map((p, i) => (
+      <a href={`${base}destinations/?province=${encodeURIComponent(p.name)}`} class="province-piece" style={`animation-delay:${i * 90}ms`}>
+        <polygon points={shapes[p.name]} fill={dark ? "rgba(255,255,255,0.09)" : p.color} fill-opacity={dark ? 1 : 0.82} stroke={dark ? "rgba(255,255,255,.55)" : "white"} stroke-width="2" stroke-linejoin="round" />
+        <title>{p.name} — {p.capital}. {p.blurb}</title>
+      </a>
+    ))}
+    {showSites && sites.map((s) => (
+      <a href={`${base}destinations/${s.slug}/`} class="site-dot" style={`transform-origin:${s.x}px ${s.y}px`}>
+        <circle cx={s.x} cy={s.y} r="9" class="site-pulse" />
+        <circle cx={s.x} cy={s.y} r="4.5" class="site-core" />
+        <title>{s.name}</title>
+      </a>
+    ))}
   </svg>
 </div>
 <style>
   .gabon-map{width:100%;height:100%}
-  .province-piece{cursor:pointer;transform-box:fill-box;transform-origin:center;transition:filter .25s ease;animation:pieceIn .6s ease backwards}
-  .province-piece:hover{filter:brightness(1.12)}
-  .province-piece rect{transition:transform .25s ease}
-  .province-piece:hover rect{transform:translateY(-3px)}
-  .province-label{font-size:11px;font-weight:700;pointer-events:none;text-transform:uppercase;letter-spacing:.02em}
-  .gabon-map-dark .province-label{font-size:10px;opacity:.9}
-  @keyframes pieceIn{from{opacity:0;transform:scale(.75)}to{opacity:1;transform:scale(1)}}
-  @media(prefers-reduced-motion:reduce){.province-piece{animation:none}}
+  .province-piece{cursor:pointer;transform-box:fill-box;transform-origin:center;transition:transform .3s ease,filter .3s ease;animation:pieceIn .7s ease backwards}
+  .province-piece:hover{transform:scale(1.08);filter:brightness(1.15)}
+  @keyframes pieceIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+  .site-dot{cursor:pointer}
+  .site-core{fill:#ef4444;stroke:#fff;stroke-width:1.5}
+  .site-pulse{fill:#ef4444;opacity:.45;animation:sitePulse 2.2s ease-out infinite}
+  .site-dot:hover .site-core{fill:#dc2626}
+  @keyframes sitePulse{0%{transform:scale(.6);opacity:.55}70%{transform:scale(2.1);opacity:0}100%{opacity:0}}
+  @media(prefers-reduced-motion:reduce){.site-pulse{animation:none;opacity:.25}.province-piece{transition:none;animation:none}}
 </style>
