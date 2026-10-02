@@ -1,5 +1,7 @@
 ---
 import "../styles/global.css";
+import ProvinceBadge from "../components/ProvinceBadge.astro";
+import { provinces } from "../data/provinces";
 const { title = "ExploreGabon", description = "Découvrez les destinations touristiques du Gabon." } = Astro.props;
 const base = import.meta.env.BASE_URL;
 ---
@@ -16,6 +18,9 @@ const base = import.meta.env.BASE_URL;
     <title>{title}</title>
   </head>
   <body>
+    <div class="site-badge-field" aria-hidden="true">
+      {provinces.map((p) => <div class="badge-float"><ProvinceBadge id={p.badge} size={72} /></div>)}
+    </div>
     <slot />
     <script>
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
