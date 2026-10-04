@@ -24,27 +24,36 @@ const centroids = {
   "Ngounié": [172.1, 269.9], "Haut-Ogooué": [338.4, 247.7], "Nyanga": [164.0, 361.0]
 };
 const jitter = { "parc-national-de-livindo": [-14, -10], "makokou": [16, 14] };
+const shortLabel = {
+  "parc-national-de-loango": "Loango", "pointe-denis": "Pointe Denis", "parc-national-de-livindo": "Ivindo",
+  "lambarene": "Lambaréné", "mayumba": "Mayumba", "makokou": "Makokou", "parc-national-de-waka": "Waka",
+  "plateaux-bateke": "Plateaux Batéké", "grottes-de-lastoursville": "Lastoursville", "parc-national-de-minkebe": "Minkébé"
+};
 const sites = destinations.map((d) => {
   const c = centroids[d.province] || [200, 230];
   const [jx, jy] = jitter[d.slug] || [0, 0];
-  return { ...d, x: c[0] + jx, y: c[1] + jy };
+  return { ...d, x: c[0] + jx, y: c[1] + jy, label: shortLabel[d.slug] || d.name };
 });
 ---
 <div class:list={["gabon-map", { "gabon-map-dark": dark }]}>
-  <svg viewBox="0 0 400 460" role="img" aria-label="Carte des 9 provinces du Gabon" class="h-full w-full">
+  <svg viewBox="0 0 400 460" role="img" aria-label="Carte des 9 provinces du Gabon" class="h-full w-full" style="overflow:visible">
     {provinces.map((p, i) => (
       <a href={`${base}destinations/?province=${encodeURIComponent(p.name)}`} class="province-piece" style={`animation-delay:${i * 90}ms`}>
         <polygon points={shapes[p.name]} fill={dark ? "rgba(255,255,255,0.09)" : p.color} fill-opacity={dark ? 1 : 0.82} stroke={dark ? "rgba(255,255,255,.55)" : "white"} stroke-width="2" stroke-linejoin="round" />
         <title>{p.name} — {p.capital}. {p.blurb}</title>
       </a>
     ))}
-    {showSites && sites.map((s) => (
-      <a href={`${base}destinations/${s.slug}/`} class="site-dot" style={`transform-origin:${s.x}px ${s.y}px`}>
-        <circle cx={s.x} cy={s.y} r="9" class="site-pulse" />
-        <circle cx={s.x} cy={s.y} r="4.5" class="site-core" />
-        <title>{s.name}</title>
-      </a>
-    ))}
+    {showSites && sites.map((s, i) => {
+      const labelRight = s.x < 300;
+      return (
+        <a href={`${base}destinations/${s.slug}/`} class="site-dot" style={`transform-origin:${s.x}px ${s.y}px`}>
+          <circle cx={s.x} cy={s.y} r="9" class="site-pulse" />
+          <circle cx={s.x} cy={s.y} r="4.5" class="site-core" />
+          <text x={labelRight ? s.x + 9 : s.x - 9} y={s.y + 3.5} text-anchor={labelRight ? "start" : "end"} class="site-label">{s.label}</text>
+          <title>{s.name}</title>
+        </a>
+      );
+    })}
   </svg>
 </div>
 <style>
@@ -54,6 +63,8 @@ const sites = destinations.map((d) => {
   @keyframes pieceIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
   .site-dot{cursor:pointer}
   .site-core{fill:#ef4444;stroke:#fff;stroke-width:1.5}
+  .site-label{font-size:10px;font-weight:700;fill:#1c1917;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+  .gabon-map-dark .site-label{fill:#fff;stroke:#0f172a}
   .site-pulse{fill:#ef4444;opacity:.45;animation:sitePulse 2.2s ease-out infinite}
   .site-dot:hover .site-core{fill:#dc2626}
   @keyframes sitePulse{0%{transform:scale(.6);opacity:.55}70%{transform:scale(2.1);opacity:0}100%{opacity:0}}
